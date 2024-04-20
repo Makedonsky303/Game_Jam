@@ -5,19 +5,14 @@ from game_functions import draw_all_game
 from Student_ import Student
 pygame.init()
 
-
 S1 = Student()
-
-background_test = pygame.image.load("screens/background_test.png")
-background_test = pygame.transform.scale(background_test,(WIDTH, HEIGHT))
-background_test_rect = background_test.get_rect()
 
 #спрайты меню
 mainScreen = pygame.image.load("screens/mainScreen.png")
 mainScreen = pygame.transform.scale(mainScreen,(WIDTH, HEIGHT))
 mainScreen_rect = mainScreen.get_rect()
 
-gameScreen = pygame.image.load("screens/imageBar.png")
+gameScreen = pygame.image.load("screens/mainBackground.png")
 gameScreen = pygame.transform.scale(gameScreen,(WIDTH, HEIGHT))
 gameScreen_rect = gameScreen.get_rect()
 
@@ -44,10 +39,10 @@ pb_yes = pygame.image.load("buttons/pb-yes.png")
 pb_no = pygame.image.load("buttons/pb-no.png")
 
 #коррекция масштаба кнопок и их rectangles
-imageBar = pygame.transform.scale(imageBar,(CHARACTERISTICS_BAR_WIDTH, CHARACTERISTICS_BAR_HEIGHT))
+imageBar = pygame.transform.scale(imageBar,(CHARACTERISTICS_BAR_WIDTH, CHARACTERISTICS_BAR_HEIGHT + 20))
 imageBar_rect = imageBar.get_rect()
 
-info = pygame.transform.scale(imageBar,(WIDTH//2, HEIGHT//2))
+info = pygame.transform.scale(imageBar,(1200, 600))
 info_rect = info.get_rect(center = (775, HEIGHT//2))
 
 condition = pygame.transform.scale(imageBar,(350, 200))
@@ -85,19 +80,19 @@ pb_no_small_rect = pb_no_small.get_rect(center = (950, 400))
 kbtu_outside = pygame.image.load("buildings_outside/kbtuu.png")
 kbtu_outside_small = pygame.transform.scale(kbtu_outside, (350, 200))
 kbtu_outside_small_rect = kbtu_outside_small.get_rect()
-kbtu_outside_small_rect.center = (625, 150)
+kbtu_outside_small_rect.center = (625, 170)
 dormitory_outside = pygame.image.load("buildings_outside/dormOutside.png")
 dormitory_outside_small = pygame.transform.scale(dormitory_outside, (350, 200))
 dormitory_outside_small_rect = dormitory_outside_small.get_rect()
-dormitory_outside_small_rect.center = (1175, 150)
+dormitory_outside_small_rect.center = (1175, 170)
 cinema_outside = pygame.image.load("buildings_outside/cinema.png")
 cinema_outside_small = pygame.transform.scale(cinema_outside, (350, 200))
 cinema_outside_small_rect = cinema_outside_small.get_rect()
-cinema_outside_small_rect.center = (625, 540)
+cinema_outside_small_rect.center = (625, 550)
 cafe_outside = pygame.image.load("buildings_outside/cafeOutside.png")
-cafe_outside_small = pygame.transform.scale(cafe_outside, (350, 200))
+cafe_outside_small = pygame.transform.scale(cafe_outside, (351, 200))
 cafe_outside_small_rect = cafe_outside_small.get_rect()
-cafe_outside_small_rect.center = (1175, 540)
+cafe_outside_small_rect.center = (1176, 555)
  
 #внутренности зданий
 kbtu_inside = pygame.image.load("buildings_inside/kbtu-inside.png")
@@ -121,31 +116,29 @@ cafe_inside_rect.center = (WIDTH//2, HEIGHT//2)
 knowledge = pygame.image.load("knowledge.png")
 knowledge = pygame.transform.scale(knowledge, (40, 40))
 knowledge_position_rect = knowledge.get_rect()
-knowledge_position_rect.center = (30, 20)
+knowledge_position_rect.center = (30, 40)
 sleep = pygame.image.load("sleep.png")
 sleep = pygame.transform.scale(sleep, (120, 120))
 sleep_position_rect = sleep.get_rect()
-sleep_position_rect.center = (52, 73)
+sleep_position_rect.center = (52, 93)
 satiety = pygame.image.load("satiety.png")
 satiety = pygame.transform.scale(satiety, (70, 70))
 satiety_position_rect = satiety.get_rect()
-satiety_position_rect.center = (34, 90)
+satiety_position_rect.center = (34, 110)
 happiness = pygame.image.load("smile.png")
 happiness_position_rect = happiness.get_rect()
-happiness_position_rect.center = (33, 128)
+happiness_position_rect.center = (33, 148)
 
 x_margin_for_bars = 30
-knowledge_bar = Bar(x_margin_for_bars,10,200,25,100,BROWN)
+knowledge_bar = Bar(x_margin_for_bars,30,200,25,100,BROWN)
 knowledge_bar.unit = 0
-sleep_bar = Bar(x_margin_for_bars,45,200,25,100,BLUE)
-satiety_bar = Bar(x_margin_for_bars,80,200,25,100,RED)
-happiness_bar = Bar(x_margin_for_bars,115,200,25,100,YELLOW)
+sleep_bar = Bar(x_margin_for_bars,65,200,25,100,BLUE)
+satiety_bar = Bar(x_margin_for_bars,100,200,25,100,RED)
+happiness_bar = Bar(x_margin_for_bars,135,200,25,100,YELLOW)
 
 
 #звуки кнопок и зданий
-# Создание канала для коротких звуков
-background_channel = pygame.mixer.Channel(0)
-
+pygame.mixer.music.load("zvuk/A_Bit_Of_Hope_-_David_Fesliyan.mp3")
 pobeda = pygame.mixer.Sound("zvuk/den-pobedy.mp3")
 unluck = pygame.mixer.Sound("zvuk/unluck.mp3")
 knopka = pygame.mixer.Sound("zvuk/zvuk-knopki.mp3")
@@ -153,13 +146,6 @@ cinema_sound = pygame.mixer.Sound("zvuk/ahhhh-sound.mp3")
 kbtu_sound = pygame.mixer.Sound("zvuk/bell.mp3")
 dormitory_sound = pygame.mixer.Sound("zvuk/hrap.mp3")
 cafe_sound = pygame.mixer.Sound("zvuk/cash_register.mp3")
-
-# Загрузка фоновой музыки
-pygame.mixer.music.load("zvuk/A_Bit_Of_Hope_-_David_Fesliyan.mp3")
-
-# Установка громкости для фоновой музыки
-pygame.mixer.music.set_volume(0.2)
-pygame.mixer.music.play(-1)
 
 screen = pygame.display.set_mode((WIDTH,HEIGHT))
 clock = pygame.time.Clock()
@@ -170,8 +156,7 @@ game_time_min = 0
 game_time_fonts = pygame.font.SysFont('comicsansms', 30)
 game_time_text = game_time_fonts.render(f"Time: {game_time_min}:{game_time_sec}", True, (0, 0, 0))
 game_time_rect = game_time_text.get_rect()
-game_time_rect.center = (120 , 240)
-
+game_time_rect.center = (120 , 250)
 
 #Time counter
 TIME_COUNT_SEC = pygame.USEREVENT + 2
@@ -217,21 +202,12 @@ show_info = False
 
 background = mainScreen
 background2 = mainScreen_rect
-
+pygame.mixer.music.set_volume(0.2)
+pygame.mixer.music.play(-1)
 while True:
     clock.tick(FPS)
     pressed = pygame.key.get_pressed()
     screen.blit(background, background2)
-
-    #числовые показатели статистики
-    knowledge_points = font_small.render(f"{knowledge_bar.unit}", True, (0, 0, 0))
-    knowledge_points_rect = knowledge_points.get_rect(center = (120, 20))
-    sleep_points = font_small.render(f"{sleep_bar.unit}", True, (0, 0, 0))
-    sleep_points_rect = sleep_points.get_rect(center = (120, 55))
-    satiety_points = font_small.render(f"{satiety_bar.unit}", True, (0, 0, 0))
-    satiety_points_rect = satiety_points.get_rect(center = (120, 90))
-    happiness_points = font_small.render(f"{happiness_bar.unit}", True, (0, 0, 0))
-    happiness_points_rect = happiness_points.get_rect(center = (120, 125))
 
     for event in pygame.event.get():
         #условия для выхода из игры
@@ -247,8 +223,8 @@ while True:
                 screen.blit(unpbexit_small, unpbexit_small_rect)
                 screen.blit(unpbinfo_small, unpbinfo_small_rect)
                 pygame.display.flip()
-                background = background_test
-                background2 = background_test_rect
+                background = gameScreen
+                background2 = gameScreen_rect
 
             elif unpbexit_small_rect.collidepoint(mouse_pos) and flag_buttons == 0:
                 screen.blit(unpbplay_small,unpbplay_small_rect)
@@ -265,13 +241,24 @@ while True:
                 screen.blit(pb_yes_small, pb_yes_small_rect)
                 confirmation = True
                 draw_all_game(screen, imageBar, imageBar_rect,kbtu_outside_small,kbtu_outside_small_rect,dormitory_outside_small,dormitory_outside_small_rect
-                  ,cinema_outside_small,cinema_outside_small_rect,cafe_outside_small,cafe_outside_small_rect, pb_no_small,pb_no_small_rect,
-                  knowledge,knowledge_position_rect,sleep,sleep_position_rect,satiety,satiety_position_rect,happiness,happiness_position_rect) 
-                pygame.display.update() #если закоментить pygame.display.flip() то анимации нет и она не дерганая
+                  ,cinema_outside_small,cinema_outside_small_rect,cafe_outside_small,cafe_outside_small_rect, pb_yes_small,pb_yes_small_rect,
+                  knowledge,knowledge_position_rect,sleep,sleep_position_rect,satiety,satiety_position_rect,happiness,happiness_position_rect, knowledge_points, knowledge_points_rect, 
+                  sleep_points, sleep_points_rect, satiety_points, satiety_points_rect, happiness_points, happiness_points_rect, course_counter_text, course_counter_text_rect, game_time_text, game_time_rect, 
+                  knowledge_bar,  sleep_bar, satiety_bar, happiness_bar,
+                  unpb_no_small, unpb_no_small_rect, unpb_no_small, unpb_no_small_rect)
+                pygame.display.update()
+                #pygame.display.flip() #если закоментить pygame.display.flip() то анимации нет и она не дерганая
             elif unpb_no_small_rect.collidepoint(mouse_pos):
                 screen.blit(pb_no_small, pb_no_small_rect)
                 confirmation = False
-                # pygame.display.update() #если закоментить pygame.display.flip() то анимации нет и она не дерганая
+                draw_all_game(screen, imageBar, imageBar_rect,kbtu_outside_small,kbtu_outside_small_rect,dormitory_outside_small,dormitory_outside_small_rect
+                  ,cinema_outside_small,cinema_outside_small_rect,cafe_outside_small,cafe_outside_small_rect, pb_no_small,pb_no_small_rect,
+                  knowledge,knowledge_position_rect,sleep,sleep_position_rect,satiety,satiety_position_rect,happiness,happiness_position_rect, knowledge_points, knowledge_points_rect, 
+                  sleep_points, sleep_points_rect, satiety_points, satiety_points_rect, happiness_points, happiness_points_rect, course_counter_text, course_counter_text_rect, game_time_text, game_time_rect, 
+                  knowledge_bar,  sleep_bar, satiety_bar, happiness_bar,
+                  unpb_yes_small, unpb_yes_small_rect, unpb_yes_small, unpb_yes_small_rect)
+                pygame.display.update()
+                #pygame.display.flip() #если закоментить pygame.display.flip() то анимации нет и она не дерганая
 ##################################################################################################################################################
 
             
@@ -327,7 +314,9 @@ while True:
 
         #на память коменты оставил (:
         #после добавки спрайтов зданий эти прямоугольники нужно убрать
-        #pygame.draw.rect(screen, BLUE, (CHARACTERISTICS_BAR_WIDTH+750,450, 350, 200))
+        pygame.draw.rect(screen, WHITE, (CHARACTERISTICS_BAR_WIDTH+200,70, 350, 200))
+        pygame.draw.rect(screen, (152, 136, 131), (CHARACTERISTICS_BAR_WIDTH+200,170, 350, 100))
+        pygame.draw.rect(screen, (152, 136, 131), (CHARACTERISTICS_BAR_WIDTH+200,455, 350, 100))
         
         #здания
         screen.blit(kbtu_outside_small, kbtu_outside_small_rect)
@@ -338,7 +327,15 @@ while True:
         S1.move()
         S1.draw(screen)
 
-        
+        #числовые показатели статистики
+        knowledge_points = font_small.render(f"{knowledge_bar.unit}", True, (0, 0, 0))
+        knowledge_points_rect = knowledge_points.get_rect(center = (120, 40))
+        sleep_points = font_small.render(f"{sleep_bar.unit}", True, (0, 0, 0))
+        sleep_points_rect = sleep_points.get_rect(center = (120, 75))
+        satiety_points = font_small.render(f"{satiety_bar.unit}", True, (0, 0, 0))
+        satiety_points_rect = satiety_points.get_rect(center = (120, 110))
+        happiness_points = font_small.render(f"{happiness_bar.unit}", True, (0, 0, 0))
+        happiness_points_rect = happiness_points.get_rect(center = (120, 145))
 
         #статистика
         knowledge_bar.draw(screen)
@@ -360,7 +357,7 @@ while True:
         #курс
         course_counter_text = font_small.render(f'Year: {course_counter}', True, (255, 255, 255))
         course_counter_text_rect = course_counter_text.get_rect()
-        course_counter_text_rect.center = (120, 180)
+        course_counter_text_rect.center = (120, 200)
         screen.blit(course_counter_text, course_counter_text_rect)
 
         #Game timer
@@ -379,6 +376,8 @@ while True:
                     sleep_bar.unit += dorm_sleep_change
                     if knowledge_bar.unit >= dorm_knoweldge_change:
                         knowledge_bar.unit += dorm_knoweldge_change
+                    if knowledge_bar.unit <= 0:
+                        knowledge_bar.unit = 0
                     if satiety_bar.unit >= dorm_satiety_change:
                         satiety_bar.unit += dorm_satiety_change
                     if happiness_bar.unit >= dorm_happiness_change:
@@ -387,13 +386,16 @@ while True:
                     sleep_bar.unit = 100
                     if knowledge_bar.unit >= dorm_knoweldge_change:
                         knowledge_bar.unit += dorm_knoweldge_change
+                    if knowledge_bar.unit <= 0:
+                        knowledge_bar.unit = 0
                     if satiety_bar.unit >= dorm_satiety_change:
                         satiety_bar.unit += dorm_satiety_change
                     if happiness_bar.unit >= dorm_happiness_change:
                         happiness_bar.unit += dorm_happiness_change
                 
                 screen.blit(dormitory_inside, dormitory_inside_rect)
-                background_channel.queue(dormitory_sound)
+                dormitory_sound.play()
+                pygame.mixer.music.pause()
                 pygame.display.flip()
                 S1.rect.center = (1175, HEIGHT//2)
                 time.sleep(2)
@@ -403,6 +405,7 @@ while True:
                 confirmation = None
                 S1.rect.center = (1175, HEIGHT//2)
                 pass
+            pygame.mixer.music.unpause()
 
 
         if S1.rect.colliderect(cinema_outside_small_rect):
@@ -416,6 +419,8 @@ while True:
                     happiness_bar.unit += SH_happiness_change
                     if knowledge_bar.unit >= SH_knoweldge_change:
                         knowledge_bar.unit += SH_knoweldge_change
+                    if knowledge_bar.unit <= 0:
+                        knowledge_bar.unit = 0
                     if satiety_bar.unit >= SH_satiety_change:
                         satiety_bar.unit += SH_satiety_change
                     if sleep_bar.unit >= SH_sleep_change:
@@ -424,13 +429,16 @@ while True:
                     happiness_bar.unit = 100
                     if knowledge_bar.unit >= SH_knoweldge_change:
                         knowledge_bar.unit += SH_knoweldge_change
+                    if knowledge_bar.unit <= 0:
+                        knowledge_bar.unit = 0
                     if satiety_bar.unit >= SH_satiety_change:
                         satiety_bar.unit += SH_satiety_change
                     if sleep_bar.unit >= SH_sleep_change:
                         sleep_bar.unit += SH_sleep_change
                 
                 screen.blit(cinema_inside, cinema_inside_rect)
-                background_channel.queue(cinema_sound)
+                cinema_sound.play()
+                pygame.mixer.music.pause()
                 pygame.display.flip()
                 S1.rect.center = (625, HEIGHT//2)
                 time.sleep(2)
@@ -440,6 +448,7 @@ while True:
                 confirmation = None
                 S1.rect.center = (625, HEIGHT//2)
                 pass
+            pygame.mixer.music.unpause()
 
 
         if S1.rect.colliderect(cafe_outside_small_rect):
@@ -453,6 +462,8 @@ while True:
                         satiety_bar.unit += cafe_satiety_change
                         if knowledge_bar.unit >= cafe_knoweldge_change:
                             knowledge_bar.unit += cafe_knoweldge_change
+                        if knowledge_bar.unit <= 0:
+                            knowledge_bar.unit = 0
                         if happiness_bar.unit >= cafe_happiness_change:
                             happiness_bar.unit += cafe_happiness_change
                         if sleep_bar.unit >= cafe_sleep_change:
@@ -461,13 +472,16 @@ while True:
                         satiety_bar.unit = 100
                         if knowledge_bar.unit >= cafe_knoweldge_change:
                             knowledge_bar.unit += cafe_knoweldge_change
+                        if knowledge_bar.unit <= 0:
+                            knowledge_bar.unit = 0
                         if happiness_bar.unit >= cafe_happiness_change:
                             happiness_bar.unit += cafe_happiness_change
                         if sleep_bar.unit >= cafe_sleep_change:
                             sleep_bar.unit += cafe_sleep_change
                     
                     screen.blit(cafe_inside, cafe_inside_rect)
-                    background_channel.queue(cafe_sound)
+                    cafe_sound.play()
+                    pygame.mixer.music.pause()
                     pygame.display.flip()
                     S1.rect.center = (1175, HEIGHT//2)
                     time.sleep(2)
@@ -477,6 +491,7 @@ while True:
                     confirmation = None
                     S1.rect.center = (1175, HEIGHT//2)
                     pass
+                pygame.mixer.music.unpause()
 
 
         if S1.rect.colliderect(kbtu_outside_small_rect):
@@ -491,6 +506,9 @@ while True:
                         knowledge_bar.unit += KBTU_knoweldge_change
                         course_counter += 1
                         knowledge_bar.unit -= 100
+                        sleep_bar.unit += 20
+                        satiety_bar.unit += 20
+                        happiness_bar.unit += 20
                         if course_counter >= 5:
                             screen.blit(winScreen, winScreen_rect)
                             game_win_time = font_small.render(f"Your Time : {game_time_min}:{game_time_sec}", True, (0, 0, 0))
@@ -510,7 +528,8 @@ while True:
                     if happiness_bar.unit>=KBTU_happiness_change:
                         happiness_bar.unit += KBTU_happiness_change 
                 screen.blit(kbtu_inside, kbtu_inside_rect)
-                background_channel.queue(kbtu_sound)
+                kbtu_sound.play()
+                pygame.mixer.music.pause()
                 pygame.display.flip()
                 S1.rect.center = (625, HEIGHT//2)
                 time.sleep(2)
@@ -520,6 +539,17 @@ while True:
                 confirmation = None
                 S1.rect.center = (625, HEIGHT//2)
                 pass
+            pygame.mixer.music.unpause()
+
+        if S1.rect.left >= 280 and S1.rect.right <= 390 and S1.rect.top <= 6:
+            S1.rect.center = (95, HEIGHT - 35)
+        if S1.rect.left <= 6 and S1.rect.bottom <= 430 and S1.rect.top >= 320:
+            S1.rect.center = (WIDTH - 35, 360)
+        if S1.rect.left >= 40 and S1.rect.right <= 150 and S1.rect.bottom >= HEIGHT - 6:
+            S1.rect.center = (335, 35)
+        if S1.rect.right >= WIDTH - 6 and S1.rect.bottom <= 430 and S1.rect.top >= 320:
+            S1.rect.center = (35, 360)
+
 
     elif show_info == 1:
         screen.blit(info, info_rect)

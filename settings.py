@@ -26,7 +26,7 @@ SPEED_OF_CHARACTER = 5
 def get_font(size):
     return pygame.font.SysFont("comicsans",size)
 
-#сатематика всея игры
+#математика всея игры
 KBTU_knoweldge_change = 25
 KBTU_sleep_change = -20
 KBTU_satiety_change = -10
