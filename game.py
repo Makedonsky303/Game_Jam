@@ -5,6 +5,9 @@ from game_functions import draw_all_game
 from Student_ import Student
 pygame.init()
 
+screen = pygame.display.set_mode((WIDTH,HEIGHT))
+clock = pygame.time.Clock()
+
 S1 = Student()
 
 #спрайты меню
@@ -42,8 +45,8 @@ pb_no = pygame.image.load("buttons/pb-no.png")
 imageBar = pygame.transform.scale(imageBar,(CHARACTERISTICS_BAR_WIDTH, CHARACTERISTICS_BAR_HEIGHT + 20))
 imageBar_rect = imageBar.get_rect()
 
-info = pygame.transform.scale(imageBar,(1200, 600))
-info_rect = info.get_rect(center = (775, HEIGHT//2))
+info = pygame.image.load("screens/info.png") 
+info_rect = info.get_rect(center = (WIDTH//2 + 25, HEIGHT//2))
 
 condition = pygame.transform.scale(imageBar,(350, 200))
 condition_rect = condition.get_rect(center = (WIDTH//2 + 75, HEIGHT//2 - 100))
@@ -113,22 +116,23 @@ cafe_inside_rect = cafe_inside.get_rect()
 cafe_inside_rect.center = (WIDTH//2, HEIGHT//2)
 
 #спрайты характеристик студента
-knowledge = pygame.image.load("knowledge.png")
+knowledge = pygame.image.load("stat sprites/knowledge.png")
 knowledge = pygame.transform.scale(knowledge, (40, 40))
 knowledge_position_rect = knowledge.get_rect()
 knowledge_position_rect.center = (30, 40)
-sleep = pygame.image.load("sleep.png")
+sleep = pygame.image.load("stat sprites/sleep.png")
 sleep = pygame.transform.scale(sleep, (120, 120))
 sleep_position_rect = sleep.get_rect()
 sleep_position_rect.center = (52, 93)
-satiety = pygame.image.load("satiety.png")
+satiety = pygame.image.load("stat sprites/satiety.png")
 satiety = pygame.transform.scale(satiety, (70, 70))
 satiety_position_rect = satiety.get_rect()
 satiety_position_rect.center = (34, 110)
-happiness = pygame.image.load("smile.png")
+happiness = pygame.image.load("stat sprites/smile.png")
 happiness_position_rect = happiness.get_rect()
 happiness_position_rect.center = (33, 148)
 
+# Шкалы характеристик
 x_margin_for_bars = 30
 knowledge_bar = Bar(x_margin_for_bars,30,200,25,100,BROWN)
 knowledge_bar.unit = 0
@@ -147,8 +151,6 @@ kbtu_sound = pygame.mixer.Sound("zvuk/bell.mp3")
 dormitory_sound = pygame.mixer.Sound("zvuk/hrap.mp3")
 cafe_sound = pygame.mixer.Sound("zvuk/cash_register.mp3")
 
-screen = pygame.display.set_mode((WIDTH,HEIGHT))
-clock = pygame.time.Clock()
 
 #Ingame timer
 game_time_sec = -1
@@ -172,27 +174,27 @@ collected_points_text_rect = collected_points_text.get_rect(center=(WIDTH//2 + 7
 
 def ask_confirmation(screen, confirmation_text, confirmation_text_rect, know, slee, sati, happ):
             
-            know_text = font_very_small.render(f"Knowledge {know}", True, (0, 0, 0))
-            know_text_rect = know_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 125))
-            slee_text = font_very_small.render(f"Sleep {slee}", True, (0, 0, 0))
-            slee_text_rect = slee_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 100))
-            sati_text = font_very_small.render(f"Satiety {sati}", True, (0, 0, 0))
-            sati_text_rect = sati_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 75))
-            happ_text = font_very_small.render(f"Happiness {happ}", True, (0, 0, 0))
-            happ_text_rect = happ_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 50))
+    know_text = font_very_small.render(f"Knowledge {know}", True, (0, 0, 0))
+    know_text_rect = know_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 125))
+    slee_text = font_very_small.render(f"Sleep {slee}", True, (0, 0, 0))
+    slee_text_rect = slee_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 100))
+    sati_text = font_very_small.render(f"Satiety {sati}", True, (0, 0, 0))
+    sati_text_rect = sati_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 75))
+    happ_text = font_very_small.render(f"Happiness {happ}", True, (0, 0, 0))
+    happ_text_rect = happ_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 50))
 
-            screen.blit(unpb_yes_small, unpb_yes_small_rect)
-            screen.blit(unpb_no_small, unpb_no_small_rect)
-            screen.blit(condition, condition_rect)
+    screen.blit(unpb_yes_small, unpb_yes_small_rect)
+    screen.blit(unpb_no_small, unpb_no_small_rect)
+    screen.blit(condition, condition_rect)
 
-            screen.blit(confirmation_text, confirmation_text_rect)
-            screen.blit(collected_points_text, collected_points_text_rect)
-            screen.blit(know_text, know_text_rect)
-            screen.blit(slee_text, slee_text_rect)
-            screen.blit(sati_text, sati_text_rect)
-            screen.blit(happ_text, happ_text_rect)
-        
-            pygame.display.flip()
+    screen.blit(confirmation_text, confirmation_text_rect)
+    screen.blit(collected_points_text, collected_points_text_rect)
+    screen.blit(know_text, know_text_rect)
+    screen.blit(slee_text, slee_text_rect)
+    screen.blit(sati_text, sati_text_rect)
+    screen.blit(happ_text, happ_text_rect)
+
+    pygame.display.flip()
 
 gaming = False
 course_counter = 1
@@ -354,6 +356,7 @@ while True:
         screen.blit(sleep, sleep_position_rect)
         screen.blit(satiety, satiety_position_rect)
         screen.blit(happiness, happiness_position_rect)
+        
         #курс
         course_counter_text = font_small.render(f'Year: {course_counter}', True, (255, 255, 255))
         course_counter_text_rect = course_counter_text.get_rect()

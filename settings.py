@@ -14,7 +14,7 @@ font_very_small = pygame.font.SysFont("Verdana", 20)
 
 BG_COLOR = WHITE
 
-FPS = 120
+FPS = 144
 
 WIDTH, HEIGHT = 1500, 700
 
@@ -26,7 +26,7 @@ SPEED_OF_CHARACTER = 5
 def get_font(size):
     return pygame.font.SysFont("comicsans",size)
 
-#математика всея игры
+#математика всей игры
 KBTU_knoweldge_change = 25
 KBTU_sleep_change = -20
 KBTU_satiety_change = -10
