@@ -392,7 +392,7 @@ while True:
             A1.restart()
             A2.restart()
             pygame.display.flip()
-            pygame.mixer.music.pause()
+            pygame.mixer.music.unpause()
             # pygame.quit()
             # sys.exit()
 
