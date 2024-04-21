@@ -3,12 +3,19 @@ from settings import *
 from bar import Bar
 from game_functions import draw_all_game
 from Student_ import Student
+from Auto_ import Auto
 pygame.init()
 
 screen = pygame.display.set_mode((WIDTH,HEIGHT))
 clock = pygame.time.Clock()
 
 S1 = Student()
+A1 = Auto("autos/green_car.png","top",5)
+A2 = Auto("autos/red_car.png","bottom",7)
+
+autos = pygame.sprite.Group()
+autos.add(A1)
+autos.add(A2)
 
 #спрайты меню
 mainScreen = pygame.image.load("screens/mainScreen.png")
@@ -26,6 +33,10 @@ winScreen_rect = winScreen.get_rect()
 failScreen = pygame.image.load("screens/failScreen.png")
 failScreen = pygame.transform.scale(failScreen,(WIDTH, HEIGHT))
 failScreen_rect = failScreen.get_rect()
+
+accidentScreen = pygame.image.load("screens/accident_screen.png")
+accidentScreen = pygame.transform.scale(accidentScreen,(WIDTH, HEIGHT))
+accidentScreen_rect = accidentScreen.get_rect()
 
 #кнопки игры и само меню
 imageBar = pygame.image.load("screens/imageBar.png")
@@ -150,6 +161,7 @@ cinema_sound = pygame.mixer.Sound("zvuk/ahhhh-sound.mp3")
 kbtu_sound = pygame.mixer.Sound("zvuk/bell.mp3")
 dormitory_sound = pygame.mixer.Sound("zvuk/hrap.mp3")
 cafe_sound = pygame.mixer.Sound("zvuk/cash_register.mp3")
+crash_sound = pygame.mixer.Sound("zvuk/crash.mp3")
 
 
 #Ingame timer
@@ -248,6 +260,10 @@ while True:
                   sleep_points, sleep_points_rect, satiety_points, satiety_points_rect, happiness_points, happiness_points_rect, course_counter_text, course_counter_text_rect, game_time_text, game_time_rect, 
                   knowledge_bar,  sleep_bar, satiety_bar, happiness_bar,
                   unpb_no_small, unpb_no_small_rect, unpb_no_small, unpb_no_small_rect)
+                S1.draw(screen)
+                for auto in autos:
+                    auto.draw(screen)
+
                 pygame.display.update()
                 #pygame.display.flip() #если закоментить pygame.display.flip() то анимации нет и она не дерганая
             elif unpb_no_small_rect.collidepoint(mouse_pos):
@@ -259,6 +275,9 @@ while True:
                   sleep_points, sleep_points_rect, satiety_points, satiety_points_rect, happiness_points, happiness_points_rect, course_counter_text, course_counter_text_rect, game_time_text, game_time_rect, 
                   knowledge_bar,  sleep_bar, satiety_bar, happiness_bar,
                   unpb_yes_small, unpb_yes_small_rect, unpb_yes_small, unpb_yes_small_rect)
+                S1.draw(screen)
+                for auto in autos:
+                    auto.draw(screen)
                 pygame.display.update()
                 #pygame.display.flip() #если закоментить pygame.display.flip() то анимации нет и она не дерганая
 ##################################################################################################################################################
@@ -278,8 +297,26 @@ while True:
             unluck.play()
             pygame.display.flip()
             time.sleep(5)
-            pygame.quit()
-            sys.exit()
+
+            sleep_bar.unit = 100 
+            satiety_bar.unit = 100
+            happiness_bar.unit = 100
+            knowledge_bar.unit = 0 
+            course_counter = 1
+            game_time_sec = 0
+            game_time_min = 0
+            gaming = False
+            background = mainScreen
+            background2 = mainScreen_rect
+            flag_buttons = 0
+            S1 = Student()
+            A1.restart()
+            A2.restart()
+            pygame.display.flip()
+            pygame.mixer.music.pause()
+
+            # pygame.quit()
+            # sys.exit()
     
         #добавляю выбор кнопок мышкой (для info пока не добавлял)
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -329,6 +366,36 @@ while True:
         S1.move()
         S1.draw(screen)
 
+        for auto in autos:
+            auto.move()
+            auto.draw(screen)
+
+        if pygame.sprite.spritecollideany(S1, autos):
+            screen.blit(accidentScreen, accidentScreen_rect)
+            pygame.mixer.music.pause()
+            crash_sound.play()
+            pygame.display.flip()
+            time.sleep(5)
+
+            sleep_bar.unit = 100 
+            satiety_bar.unit = 100
+            happiness_bar.unit = 100
+            knowledge_bar.unit = 0 
+            course_counter = 1
+            game_time_sec = 0
+            game_time_min = 0
+            gaming = False
+            background = mainScreen
+            background2 = mainScreen_rect
+            flag_buttons = 0
+            S1 = Student()
+            A1.restart()
+            A2.restart()
+            pygame.display.flip()
+            pygame.mixer.music.pause()
+            # pygame.quit()
+            # sys.exit()
+
         #числовые показатели статистики
         knowledge_points = font_small.render(f"{knowledge_bar.unit}", True, (0, 0, 0))
         knowledge_points_rect = knowledge_points.get_rect(center = (120, 40))
@@ -356,7 +423,7 @@ while True:
         screen.blit(sleep, sleep_position_rect)
         screen.blit(satiety, satiety_position_rect)
         screen.blit(happiness, happiness_position_rect)
-        
+
         #курс
         course_counter_text = font_small.render(f'Year: {course_counter}', True, (255, 255, 255))
         course_counter_text_rect = course_counter_text.get_rect()
@@ -400,13 +467,13 @@ while True:
                 dormitory_sound.play()
                 pygame.mixer.music.pause()
                 pygame.display.flip()
-                S1.rect.center = (1175, HEIGHT//2)
+                S1.rect.center = (WIDTH//2+150, HEIGHT//2-100)
                 time.sleep(2)
                 game_time_sec -= 2
                 confirmation = None
             elif confirmation == False:
                 confirmation = None
-                S1.rect.center = (1175, HEIGHT//2)
+                S1.rect.center = (WIDTH//2+150, HEIGHT//2-100)
                 pass
             pygame.mixer.music.unpause()
 
@@ -443,13 +510,13 @@ while True:
                 cinema_sound.play()
                 pygame.mixer.music.pause()
                 pygame.display.flip()
-                S1.rect.center = (625, HEIGHT//2)
+                S1.rect.center = (WIDTH//2+150, HEIGHT//2+150)
                 time.sleep(2)
                 game_time_sec -= 2
                 confirmation = None
             elif confirmation == False:
                 confirmation = None
-                S1.rect.center = (625, HEIGHT//2)
+                S1.rect.center = (WIDTH//2+150, HEIGHT//2+150)
                 pass
             pygame.mixer.music.unpause()
 
@@ -486,13 +553,13 @@ while True:
                     cafe_sound.play()
                     pygame.mixer.music.pause()
                     pygame.display.flip()
-                    S1.rect.center = (1175, HEIGHT//2)
+                    S1.rect.center = (WIDTH//2+150, HEIGHT//2+150)
                     time.sleep(2)
                     game_time_sec -= 2
                     confirmation = None
                 elif confirmation == False:
                     confirmation = None
-                    S1.rect.center = (1175, HEIGHT//2)
+                    S1.rect.center = (WIDTH//2+150, HEIGHT//2+150)
                     pass
                 pygame.mixer.music.unpause()
 
@@ -509,7 +576,7 @@ while True:
                         knowledge_bar.unit += KBTU_knoweldge_change
                         course_counter += 1
                         knowledge_bar.unit -= 100
-                        sleep_bar.unit += 20
+                        sleep_bar.unit += 30
                         satiety_bar.unit += 20
                         happiness_bar.unit += 20
                         if course_counter >= 5:
@@ -520,8 +587,25 @@ while True:
                             pobeda.play()
                             pygame.display.flip()
                             time.sleep(5)
-                            pygame.quit()
-                            sys.exit()
+
+                            sleep_bar.unit = 100 
+                            satiety_bar.unit = 100
+                            happiness_bar.unit = 100
+                            knowledge_bar.unit = 0 
+                            course_counter = 1
+                            game_time_sec = 0
+                            game_time_min = 0
+                            gaming = False
+                            background = mainScreen
+                            background2 = mainScreen_rect
+                            flag_buttons = 0
+                            S1 = Student()
+                            A1.restart()
+                            A2.restart()
+                            pygame.display.flip()
+                            pygame.mixer.music.pause()
+                            # pygame.quit()
+                            # sys.exit()
                     else:
                         knowledge_bar.unit += KBTU_knoweldge_change
                     if sleep_bar.unit>=KBTU_sleep_change:
@@ -530,17 +614,21 @@ while True:
                         satiety_bar.unit += KBTU_satiety_change
                     if happiness_bar.unit>=KBTU_happiness_change:
                         happiness_bar.unit += KBTU_happiness_change 
-                screen.blit(kbtu_inside, kbtu_inside_rect)
-                kbtu_sound.play()
-                pygame.mixer.music.pause()
-                pygame.display.flip()
-                S1.rect.center = (625, HEIGHT//2)
-                time.sleep(2)
-                game_time_sec -= 2
+                
+                if course_counter == 4 and knowledge_bar.unit+25>=0:
+                    kbtu_sound.play()
+                    pygame.mixer.music.pause()
+                    screen.blit(kbtu_inside, kbtu_inside_rect)
+                    pygame.display.flip()
+                
+                    S1.rect.center = (WIDTH//2+150, HEIGHT//2-100)
+                    time.sleep(2)
+                    game_time_sec -= 2
+                pygame.mixer.music.pause()    
                 confirmation = None
             elif confirmation == False:
                 confirmation = None
-                S1.rect.center = (625, HEIGHT//2)
+                S1.rect.center = (WIDTH//2+150, HEIGHT//2-100)
                 pass
             pygame.mixer.music.unpause()
 

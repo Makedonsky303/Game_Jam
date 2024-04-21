@@ -35,7 +35,7 @@ class Student(pygame.sprite.Sprite):
         super().__init__() 
         self.image = face_small
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH//2 + 150, HEIGHT//2)
+        self.rect.center = (WIDTH//2 + 150, HEIGHT//2-100)
         self.direction = "down"
 
         # изменение кадра
