@@ -209,7 +209,7 @@ def ask_confirmation(screen, confirmation_text, confirmation_text_rect, know, sl
     pygame.display.flip()
 
 gaming = False
-course_counter = 1
+course_counter = 0
 flag_buttons = 0
 confirmation = None
 show_info = False
@@ -313,7 +313,7 @@ while True:
             A1.restart()
             A2.restart()
             pygame.display.flip()
-            pygame.mixer.music.pause()
+            pygame.mixer.music.unpause()
 
             # pygame.quit()
             # sys.exit()
@@ -603,7 +603,7 @@ while True:
                             A1.restart()
                             A2.restart()
                             pygame.display.flip()
-                            pygame.mixer.music.pause()
+                            pygame.mixer.music.unpause()
                             continue
                             # pygame.quit()
                             # sys.exit()
