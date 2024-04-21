@@ -209,7 +209,7 @@ def ask_confirmation(screen, confirmation_text, confirmation_text_rect, know, sl
     pygame.display.flip()
 
 gaming = False
-course_counter = 4
+course_counter = 1
 flag_buttons = 0
 confirmation = None
 show_info = False
