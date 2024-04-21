@@ -209,7 +209,7 @@ def ask_confirmation(screen, confirmation_text, confirmation_text_rect, know, sl
     pygame.display.flip()
 
 gaming = False
-course_counter = 1
+course_counter = 4
 flag_buttons = 0
 confirmation = None
 show_info = False
@@ -604,6 +604,7 @@ while True:
                             A2.restart()
                             pygame.display.flip()
                             pygame.mixer.music.pause()
+                            continue
                             # pygame.quit()
                             # sys.exit()
                     else:
@@ -615,15 +616,14 @@ while True:
                     if happiness_bar.unit>=KBTU_happiness_change:
                         happiness_bar.unit += KBTU_happiness_change 
                 
-                if course_counter == 4 and knowledge_bar.unit+25>=0:
-                    kbtu_sound.play()
-                    pygame.mixer.music.pause()
-                    screen.blit(kbtu_inside, kbtu_inside_rect)
-                    pygame.display.flip()
-                
-                    S1.rect.center = (WIDTH//2+150, HEIGHT//2-100)
-                    time.sleep(2)
-                    game_time_sec -= 2
+                kbtu_sound.play()
+                pygame.mixer.music.pause()
+                screen.blit(kbtu_inside, kbtu_inside_rect)
+                pygame.display.flip()
+            
+                S1.rect.center = (WIDTH//2+150, HEIGHT//2-100)
+                time.sleep(2)
+                game_time_sec -= 2
                 pygame.mixer.music.pause()    
                 confirmation = None
             elif confirmation == False:
