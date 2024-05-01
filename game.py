@@ -1,7 +1,7 @@
 import pygame, sys, time
 from settings import *
-from bar import Bar
-from game_functions import draw_all_game
+from sprites import *
+from game_functions import draw_all_game, ask_confirmation
 from Student_ import Student
 from Auto_ import Auto
 pygame.init()
@@ -17,157 +17,8 @@ autos = pygame.sprite.Group()
 autos.add(A1)
 autos.add(A2)
 
-#спрайты меню
-mainScreen = pygame.image.load("screens/mainScreen.png")
-mainScreen = pygame.transform.scale(mainScreen,(WIDTH, HEIGHT))
-mainScreen_rect = mainScreen.get_rect()
-
-gameScreen = pygame.image.load("screens/mainBackground.png")
-gameScreen = pygame.transform.scale(gameScreen,(WIDTH, HEIGHT))
-gameScreen_rect = gameScreen.get_rect()
-
-winScreen = pygame.image.load("screens/winScreen.png")
-winScreen = pygame.transform.scale(winScreen,(WIDTH, HEIGHT))
-winScreen_rect = winScreen.get_rect()
-
-failScreen = pygame.image.load("screens/failScreen.png")
-failScreen = pygame.transform.scale(failScreen,(WIDTH, HEIGHT))
-failScreen_rect = failScreen.get_rect()
-
-accidentScreen = pygame.image.load("screens/accident_screen.png")
-accidentScreen = pygame.transform.scale(accidentScreen,(WIDTH, HEIGHT))
-accidentScreen_rect = accidentScreen.get_rect()
-
-#кнопки игры и само меню
-imageBar = pygame.image.load("screens/imageBar.png")
-unpbplay = pygame.image.load("buttons/unpbplay.png")
-unpbexit = pygame.image.load("buttons/unpbexit.png")
-unpbinfo = pygame.image.load("buttons/unpbinfo.png")
-pbplay = pygame.image.load("buttons/pbplay.png")
-pbexit = pygame.image.load("buttons/pbexit.png")
-pbinfo = pygame.image.load("buttons/pbinfo.png")
-
-unpb_yes = pygame.image.load("buttons/unpb-yes.png")
-unpb_no = pygame.image.load("buttons/unpb-no.png")
-pb_yes = pygame.image.load("buttons/pb-yes.png")
-pb_no = pygame.image.load("buttons/pb-no.png")
-
-#коррекция масштаба кнопок и их rectangles
-imageBar = pygame.transform.scale(imageBar,(CHARACTERISTICS_BAR_WIDTH, CHARACTERISTICS_BAR_HEIGHT + 20))
-imageBar_rect = imageBar.get_rect()
-
-info = pygame.image.load("screens/info.png") 
-info_rect = info.get_rect(center = (WIDTH//2 + 25, HEIGHT//2))
-
-condition = pygame.transform.scale(imageBar,(350, 200))
-condition_rect = condition.get_rect(center = (WIDTH//2 + 75, HEIGHT//2 - 100))
-
-unpbplay_small = pygame.transform.scale(unpbplay,(350,150))
-unpbplay_small_rect = unpbplay_small.get_rect()
-unpbplay_small_rect.center = (775,325)
-unpbexit_small = pygame.transform.scale(unpbexit,(350,150))
-unpbexit_small_rect = unpbexit_small.get_rect()
-unpbexit_small_rect.center = (775,475)
-unpbinfo_small = pygame.transform.scale(unpbinfo,(350,150))
-unpbinfo_small_rect = unpbinfo_small.get_rect()
-unpbinfo_small_rect.center = (775,625)
-pbplay_small = pygame.transform.scale(pbplay,(350,150))
-pbplay_small_rect = pbplay_small.get_rect()
-pbplay_small_rect.center = (775,325)
-pbexit_small = pygame.transform.scale(pbexit,(350,150))
-pbexit_small_rect = pbexit_small.get_rect()
-pbexit_small_rect.center = (775,475)
-pbinfo_small = pygame.transform.scale(pbinfo,(350,150))
-pbinfo_small_rect = pbinfo_small.get_rect()
-pbinfo_small_rect.center = (775,625)
-
-unpb_yes_small = pygame.transform.scale(unpb_yes,(100, 50))
-unpb_yes_small_rect = unpb_yes_small.get_rect(center = (700, 400))
-unpb_no_small = pygame.transform.scale(unpb_no,(105, 55))
-unpb_no_small_rect = unpb_no_small.get_rect(center = (950, 400))
-pb_yes_small = pygame.transform.scale(pb_yes,(100, 50))
-pb_yes_small_rect = pb_yes_small.get_rect(center = (700, 400))
-pb_no_small = pygame.transform.scale(pb_no,(105, 55))
-pb_no_small_rect = pb_no_small.get_rect(center = (950, 400))
-
-#спрайты зданий снаружи
-kbtu_outside = pygame.image.load("buildings_outside/kbtuu.png")
-kbtu_outside_small = pygame.transform.scale(kbtu_outside, (350, 200))
-kbtu_outside_small_rect = kbtu_outside_small.get_rect()
-kbtu_outside_small_rect.center = (625, 170)
-dormitory_outside = pygame.image.load("buildings_outside/dormOutside.png")
-dormitory_outside_small = pygame.transform.scale(dormitory_outside, (350, 200))
-dormitory_outside_small_rect = dormitory_outside_small.get_rect()
-dormitory_outside_small_rect.center = (1175, 170)
-cinema_outside = pygame.image.load("buildings_outside/cinema.png")
-cinema_outside_small = pygame.transform.scale(cinema_outside, (350, 200))
-cinema_outside_small_rect = cinema_outside_small.get_rect()
-cinema_outside_small_rect.center = (625, 550)
-cafe_outside = pygame.image.load("buildings_outside/cafeOutside.png")
-cafe_outside_small = pygame.transform.scale(cafe_outside, (351, 200))
-cafe_outside_small_rect = cafe_outside_small.get_rect()
-cafe_outside_small_rect.center = (1176, 555)
- 
-#внутренности зданий
-kbtu_inside = pygame.image.load("buildings_inside/kbtu-inside.png")
-kbtu_inside = pygame.transform.scale(kbtu_inside, (WIDTH, HEIGHT))
-kbtu_inside_rect = kbtu_inside.get_rect()
-kbtu_inside_rect.center = (WIDTH//2, HEIGHT//2)
-dormitory_inside = pygame.image.load("buildings_inside/dormitory.png")
-dormitory_inside = pygame.transform.scale(dormitory_inside, (WIDTH, HEIGHT))
-dormitory_inside_rect = dormitory_inside.get_rect()
-dormitory_inside_rect.center = (WIDTH//2, HEIGHT//2)
-cinema_inside = pygame.image.load("buildings_inside/film.png")
-cinema_inside = pygame.transform.scale(cinema_inside, (WIDTH + 150, HEIGHT + 160))
-cinema_inside_rect = cinema_inside.get_rect()
-cinema_inside_rect.center = (WIDTH//2, HEIGHT//2 + 35)
-cafe_inside = pygame.image.load("buildings_inside/cafe-inside.png")
-cafe_inside = pygame.transform.scale(cafe_inside, (WIDTH, HEIGHT))
-cafe_inside_rect = cafe_inside.get_rect()
-cafe_inside_rect.center = (WIDTH//2, HEIGHT//2)
-
-#спрайты характеристик студента
-knowledge = pygame.image.load("stat sprites/knowledge.png")
-knowledge = pygame.transform.scale(knowledge, (40, 40))
-knowledge_position_rect = knowledge.get_rect()
-knowledge_position_rect.center = (30, 40)
-sleep = pygame.image.load("stat sprites/sleep.png")
-sleep = pygame.transform.scale(sleep, (120, 120))
-sleep_position_rect = sleep.get_rect()
-sleep_position_rect.center = (52, 93)
-satiety = pygame.image.load("stat sprites/satiety.png")
-satiety = pygame.transform.scale(satiety, (70, 70))
-satiety_position_rect = satiety.get_rect()
-satiety_position_rect.center = (34, 110)
-happiness = pygame.image.load("stat sprites/smile.png")
-happiness_position_rect = happiness.get_rect()
-happiness_position_rect.center = (33, 148)
-
-# Шкалы характеристик
-x_margin_for_bars = 30
-knowledge_bar = Bar(x_margin_for_bars,30,200,25,100,BROWN)
-knowledge_bar.unit = 0
-sleep_bar = Bar(x_margin_for_bars,65,200,25,100,BLUE)
-satiety_bar = Bar(x_margin_for_bars,100,200,25,100,RED)
-happiness_bar = Bar(x_margin_for_bars,135,200,25,100,YELLOW)
-
-
-#звуки кнопок и зданий
-pygame.mixer.music.load("zvuk/A_Bit_Of_Hope_-_David_Fesliyan.mp3")
-pobeda = pygame.mixer.Sound("zvuk/den-pobedy.mp3")
-unluck = pygame.mixer.Sound("zvuk/unluck.mp3")
-knopka = pygame.mixer.Sound("zvuk/zvuk-knopki.mp3")
-cinema_sound = pygame.mixer.Sound("zvuk/ahhhh-sound.mp3")
-kbtu_sound = pygame.mixer.Sound("zvuk/bell.mp3")
-dormitory_sound = pygame.mixer.Sound("zvuk/hrap.mp3")
-cafe_sound = pygame.mixer.Sound("zvuk/cash_register.mp3")
-crash_sound = pygame.mixer.Sound("zvuk/crash.mp3")
-
-
 #Ingame timer
-game_time_sec = -1
-game_time_min = 0
-game_time_fonts = pygame.font.SysFont('comicsansms', 30)
+game_time_fonts = get_font(30)
 game_time_text = game_time_fonts.render(f"Time: {game_time_min}:{game_time_sec}", True, (0, 0, 0))
 game_time_rect = game_time_text.get_rect()
 game_time_rect.center = (120 , 250)
@@ -176,58 +27,25 @@ game_time_rect.center = (120 , 250)
 TIME_COUNT_SEC = pygame.USEREVENT + 2
 pygame.time.set_timer(TIME_COUNT_SEC, 1000)
 
-# Определяем кнопки заранее
-#yes_button = pygame.Rect(650, 350, 100, 50)
-#no_button = pygame.Rect(900, 350, 100, 50)
-
-collected_points_text = font_very_small.render("If you enter you will get:", True, (0, 0, 0))
-collected_points_text_rect = collected_points_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 150))
-
-
-def ask_confirmation(screen, confirmation_text, confirmation_text_rect, know, slee, sati, happ):
-            
-    know_text = font_very_small.render(f"Knowledge {know}", True, (0, 0, 0))
-    know_text_rect = know_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 125))
-    slee_text = font_very_small.render(f"Sleep {slee}", True, (0, 0, 0))
-    slee_text_rect = slee_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 100))
-    sati_text = font_very_small.render(f"Satiety {sati}", True, (0, 0, 0))
-    sati_text_rect = sati_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 75))
-    happ_text = font_very_small.render(f"Happiness {happ}", True, (0, 0, 0))
-    happ_text_rect = happ_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 50))
-
-    screen.blit(unpb_yes_small, unpb_yes_small_rect)
-    screen.blit(unpb_no_small, unpb_no_small_rect)
-    screen.blit(condition, condition_rect)
-
-    screen.blit(confirmation_text, confirmation_text_rect)
-    screen.blit(collected_points_text, collected_points_text_rect)
-    screen.blit(know_text, know_text_rect)
-    screen.blit(slee_text, slee_text_rect)
-    screen.blit(sati_text, sati_text_rect)
-    screen.blit(happ_text, happ_text_rect)
-
-    pygame.display.flip()
-
-gaming = False
-course_counter = 0
-flag_buttons = 0
-confirmation = None
-show_info = False
-
-background = mainScreen
-background2 = mainScreen_rect
 pygame.mixer.music.set_volume(0.2)
 pygame.mixer.music.play(-1)
+
 while True:
     clock.tick(FPS)
     pressed = pygame.key.get_pressed()
-    screen.blit(background, background2)
+    screen.blit(background, background_rect)
 
     for event in pygame.event.get():
         #условия для выхода из игры
         if event.type == pygame.QUIT or pressed[pygame.K_ESCAPE]:
             pygame.quit()
             sys.exit()
+        #условия для счетчика времени
+        if event.type == TIME_COUNT_SEC and gaming == True:
+                game_time_sec += 1
+                if game_time_sec == 60 and gaming == True:
+                    game_time_min += 1
+                    game_time_sec = 0
 
         #условия для кнопок подтверждения
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -238,7 +56,7 @@ while True:
                 screen.blit(unpbinfo_small, unpbinfo_small_rect)
                 pygame.display.flip()
                 background = gameScreen
-                background2 = gameScreen_rect
+                background_rect = gameScreen_rect
 
             elif unpbexit_small_rect.collidepoint(mouse_pos) and flag_buttons == 0:
                 screen.blit(unpbplay_small,unpbplay_small_rect)
@@ -282,13 +100,6 @@ while True:
                 #pygame.display.flip() #если закоментить pygame.display.flip() то анимации нет и она не дерганая
 ##################################################################################################################################################
 
-            
-        #условия для счетчика времени
-        if event.type == TIME_COUNT_SEC and gaming == True:
-                game_time_sec += 1
-                if game_time_sec == 60 and gaming == True:
-                    game_time_min += 1
-                    game_time_sec = 0
 
         #условия проигрыша
         if sleep_bar.unit <= 0 or satiety_bar.unit <= 0 or happiness_bar.unit <= 0:
@@ -307,16 +118,13 @@ while True:
             game_time_min = 0
             gaming = False
             background = mainScreen
-            background2 = mainScreen_rect
+            background_rect = mainScreen_rect
             flag_buttons = 0
             S1 = Student()
             A1.restart()
             A2.restart()
             pygame.display.flip()
             pygame.mixer.music.unpause()
-
-            # pygame.quit()
-            # sys.exit()
     
         #добавляю выбор кнопок мышкой (для info пока не добавлял)
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -386,7 +194,7 @@ while True:
             game_time_min = 0
             gaming = False
             background = mainScreen
-            background2 = mainScreen_rect
+            background_rect = mainScreen_rect
             flag_buttons = 0
             S1 = Student()
             A1.restart()
@@ -597,7 +405,7 @@ while True:
                             game_time_min = 0
                             gaming = False
                             background = mainScreen
-                            background2 = mainScreen_rect
+                            background_rect = mainScreen_rect
                             flag_buttons = 0
                             S1 = Student()
                             A1.restart()
@@ -647,7 +455,7 @@ while True:
         screen.blit(unpbinfo_small, unpbinfo_small_rect)
         pygame.display.update()
     else:
-        screen.blit(unpbplay_small,unpbplay_small_rect)
+        screen.blit(unpbplay_small, unpbplay_small_rect)
         screen.blit(unpbexit_small, unpbexit_small_rect)
         screen.blit(unpbinfo_small, unpbinfo_small_rect)   
 

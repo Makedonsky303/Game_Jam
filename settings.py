@@ -24,7 +24,7 @@ CHARACTERISTICS_BAR_HEIGHT = 300
 SPEED_OF_CHARACTER = 5
 
 def get_font(size):
-    return pygame.font.SysFont("comicsans",size)
+    return pygame.font.SysFont("comicsansms",size)
 
 #математика всей игры
 KBTU_knoweldge_change = 25
@@ -46,3 +46,17 @@ SH_knoweldge_change = -15
 SH_sleep_change = -5
 SH_satiety_change = -5
 SH_happiness_change = 20
+
+# Margins
+x_margin_for_bars = 30
+
+# Init
+gaming = False
+course_counter = 1
+game_time_sec = -1
+game_time_min = 0
+flag_buttons = 0
+confirmation = None
+show_info = False
+
+ 
