@@ -2,26 +2,10 @@ import pygame, sys, time
 from settings import *
 from sprites import *
 from game_functions import draw_all_game, ask_confirmation
-from Student_ import Student
-from Auto_ import Auto
 pygame.init()
 
 screen = pygame.display.set_mode((WIDTH,HEIGHT))
 clock = pygame.time.Clock()
-
-S1 = Student()
-A1 = Auto("autos/green_car.png","top",5)
-A2 = Auto("autos/red_car.png","bottom",7)
-
-autos = pygame.sprite.Group()
-autos.add(A1)
-autos.add(A2)
-
-#Ingame timer
-game_time_fonts = get_font(30)
-game_time_text = game_time_fonts.render(f"Time: {game_time_min}:{game_time_sec}", True, (0, 0, 0))
-game_time_rect = game_time_text.get_rect()
-game_time_rect.center = (120 , 250)
 
 #Time counter
 TIME_COUNT_SEC = pygame.USEREVENT + 2
@@ -33,6 +17,7 @@ pygame.mixer.music.play(-1)
 while True:
     clock.tick(FPS)
     pressed = pygame.key.get_pressed()
+
     screen.blit(background, background_rect)
 
     for event in pygame.event.get():
@@ -83,7 +68,7 @@ while True:
                     auto.draw(screen)
 
                 pygame.display.update()
-                #pygame.display.flip() #если закоментить pygame.display.flip() то анимации нет и она не дерганая
+
             elif unpb_no_small_rect.collidepoint(mouse_pos):
                 screen.blit(pb_no_small, pb_no_small_rect)
                 confirmation = False
@@ -97,8 +82,7 @@ while True:
                 for auto in autos:
                     auto.draw(screen)
                 pygame.display.update()
-                #pygame.display.flip() #если закоментить pygame.display.flip() то анимации нет и она не дерганая
-##################################################################################################################################################
+                
 
 
         #условия проигрыша
@@ -201,18 +185,6 @@ while True:
             A2.restart()
             pygame.display.flip()
             pygame.mixer.music.unpause()
-            # pygame.quit()
-            # sys.exit()
-
-        #числовые показатели статистики
-        knowledge_points = font_small.render(f"{knowledge_bar.unit}", True, (0, 0, 0))
-        knowledge_points_rect = knowledge_points.get_rect(center = (120, 40))
-        sleep_points = font_small.render(f"{sleep_bar.unit}", True, (0, 0, 0))
-        sleep_points_rect = sleep_points.get_rect(center = (120, 75))
-        satiety_points = font_small.render(f"{satiety_bar.unit}", True, (0, 0, 0))
-        satiety_points_rect = satiety_points.get_rect(center = (120, 110))
-        happiness_points = font_small.render(f"{happiness_bar.unit}", True, (0, 0, 0))
-        happiness_points_rect = happiness_points.get_rect(center = (120, 145))
 
         #статистика
         knowledge_bar.draw(screen)
@@ -413,8 +385,7 @@ while True:
                             pygame.display.flip()
                             pygame.mixer.music.unpause()
                             continue
-                            # pygame.quit()
-                            # sys.exit()
+                            
                     else:
                         knowledge_bar.unit += KBTU_knoweldge_change
                     if sleep_bar.unit>=KBTU_sleep_change:

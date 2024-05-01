@@ -2,6 +2,23 @@ import pygame
 pygame.init()
 from settings import *
 from bar import Bar
+from Student_ import Student
+from Auto_ import Auto
+
+# спрайты "существ"
+S1 = Student()
+A1 = Auto("autos/green_car.png","top",5)
+A2 = Auto("autos/red_car.png","bottom",7)
+
+autos = pygame.sprite.Group()
+autos.add(A1)
+autos.add(A2)
+
+#Ingame timer
+game_time_fonts = get_font(30)
+game_time_text = game_time_fonts.render(f"Time: {game_time_min}:{game_time_sec}", True, (0, 0, 0))
+game_time_rect = game_time_text.get_rect()
+game_time_rect.center = (120 , 250)
 
 #спрайты меню
 mainScreen = pygame.image.load("screens/mainScreen.png")
@@ -155,3 +172,14 @@ knowledge_bar.unit = 0
 sleep_bar = Bar(x_margin_for_bars,65,200,25,100,BLUE)
 satiety_bar = Bar(x_margin_for_bars,100,200,25,100,RED)
 happiness_bar = Bar(x_margin_for_bars,135,200,25,100,YELLOW)
+
+
+#числовые показатели статистики
+knowledge_points = font_small.render(f"{knowledge_bar.unit}", True, (0, 0, 0))
+knowledge_points_rect = knowledge_points.get_rect(center = (120, 40))
+sleep_points = font_small.render(f"{sleep_bar.unit}", True, (0, 0, 0))
+sleep_points_rect = sleep_points.get_rect(center = (120, 75))
+satiety_points = font_small.render(f"{satiety_bar.unit}", True, (0, 0, 0))
+satiety_points_rect = satiety_points.get_rect(center = (120, 110))
+happiness_points = font_small.render(f"{happiness_bar.unit}", True, (0, 0, 0))
+happiness_points_rect = happiness_points.get_rect(center = (120, 145))
