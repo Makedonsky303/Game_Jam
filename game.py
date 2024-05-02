@@ -1,7 +1,7 @@
 import pygame, sys, time
 from settings import *
 from sprites import *
-from game_functions import draw_all_game, ask_confirmation
+from game_functions import *
 pygame.init()
 
 screen = pygame.display.set_mode((WIDTH,HEIGHT))
@@ -13,6 +13,8 @@ pygame.time.set_timer(TIME_COUNT_SEC, 1000)
 
 pygame.mixer.music.set_volume(0.2)
 pygame.mixer.music.play(-1)
+
+
 
 while True:
     clock.tick(FPS)
@@ -31,6 +33,16 @@ while True:
                 if game_time_sec == 60 and gaming == True:
                     game_time_min += 1
                     game_time_sec = 0
+        elif event.type == pygame.MOUSEBUTTONDOWN and basketball:
+            if ball.collidepoint(event.pos): #check if click is within ball bounds
+                dragging = True
+                drag_start_pos = event.pos #remember the starting position for drag
+        elif event.type == pygame.MOUSEBUTTONUP and basketball:
+            if dragging:
+                dx = event.pos[0] - drag_start_pos[0]
+                dy = event.pos[1] - drag_start_pos[1]
+                ball_velocity = [dx * drag_strength, dy * drag_strength]  #scale the launch velocity
+                dragging = False            
 
         #условия для кнопок подтверждения
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -141,7 +153,6 @@ while True:
                     time.sleep(0.3) 
         
     if gaming:
-        screen.blit(imageBar, imageBar_rect)
 
         #на память коменты оставил (:
         #после добавки спрайтов зданий эти прямоугольники нужно убрать
@@ -149,42 +160,22 @@ while True:
         pygame.draw.rect(screen, (152, 136, 131), (CHARACTERISTICS_BAR_WIDTH+200,170, 350, 100))
         pygame.draw.rect(screen, (152, 136, 131), (CHARACTERISTICS_BAR_WIDTH+200,455, 350, 100))
         
+        screen.blit(imageBar, imageBar_rect)
         #здания
         screen.blit(kbtu_outside_small, kbtu_outside_small_rect)
         screen.blit(dormitory_outside_small, dormitory_outside_small_rect)
         screen.blit(cinema_outside_small, cinema_outside_small_rect)
         screen.blit(cafe_outside_small, cafe_outside_small_rect)
 
-        S1.move()
-        S1.draw(screen)
-
-        for auto in autos:
-            auto.move()
-            auto.draw(screen)
-
-        if pygame.sprite.spritecollideany(S1, autos):
-            screen.blit(accidentScreen, accidentScreen_rect)
-            pygame.mixer.music.pause()
-            crash_sound.play()
-            pygame.display.flip()
-            time.sleep(5)
-
-            sleep_bar.unit = 100 
-            satiety_bar.unit = 100
-            happiness_bar.unit = 100
-            knowledge_bar.unit = 0 
-            course_counter = 1
-            game_time_sec = 0
-            game_time_min = 0
-            gaming = False
-            background = mainScreen
-            background_rect = mainScreen_rect
-            flag_buttons = 0
-            S1 = Student()
-            A1.restart()
-            A2.restart()
-            pygame.display.flip()
-            pygame.mixer.music.unpause()
+        #числовые показатели статистики
+        knowledge_points = font_small.render(f"{knowledge_bar.unit}", True, (0, 0, 0))
+        knowledge_points_rect = knowledge_points.get_rect(center = (120, 40))
+        sleep_points = font_small.render(f"{sleep_bar.unit}", True, (0, 0, 0))
+        sleep_points_rect = sleep_points.get_rect(center = (120, 75))
+        satiety_points = font_small.render(f"{satiety_bar.unit}", True, (0, 0, 0))
+        satiety_points_rect = satiety_points.get_rect(center = (120, 110))
+        happiness_points = font_small.render(f"{happiness_bar.unit}", True, (0, 0, 0))
+        happiness_points_rect = happiness_points.get_rect(center = (120, 145))
 
         #статистика
         knowledge_bar.draw(screen)
@@ -214,6 +205,46 @@ while True:
         game_time_text = game_time_fonts.render(f"Time: {game_time_min}:{game_time_sec}", True, (255, 255, 255))
         screen.blit(game_time_text, game_time_rect)
 
+
+        S1.move()
+        S1.draw(screen)
+
+        for auto in autos:
+            auto.move()
+            auto.draw(screen)
+
+        if S1.rect.x>= 215 and S1.rect.x <= 355 and S1.rect.y >= 440:
+            confirmation_text = font_small.render("Basketball Field", True, (0, 0, 0))
+            confirmation_text_rect = confirmation_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 175))
+            ask_confirmation_happ(screen, confirmation_text, confirmation_text_rect, 5)
+            if confirmation:
+                gaming = False
+                basketball = True
+                continue    
+
+        if pygame.sprite.spritecollideany(S1, autos):
+            screen.blit(accidentScreen, accidentScreen_rect)
+            pygame.mixer.music.pause()
+            crash_sound.play()
+            pygame.display.flip()
+            time.sleep(5)
+
+            sleep_bar.unit = 100 
+            satiety_bar.unit = 100
+            happiness_bar.unit = 100
+            knowledge_bar.unit = 0 
+            course_counter = 1
+            game_time_sec = 0
+            game_time_min = 0
+            gaming = False
+            background = mainScreen
+            background_rect = mainScreen_rect
+            flag_buttons = 0
+            S1 = Student()
+            A1.restart()
+            A2.restart()
+            pygame.display.flip()
+            pygame.mixer.music.unpause()
 
         if S1.rect.colliderect(dormitory_outside_small_rect):
             confirmation_text = font_small.render("BUILDING: Dormitory", True, (0, 0, 0))
@@ -425,9 +456,46 @@ while True:
         screen.blit(info, info_rect)
         screen.blit(unpbinfo_small, unpbinfo_small_rect)
         pygame.display.update()
+    elif basketball:   
+        background = bg
+        background_rect = bg_rect
+        
+        #updating ball position with velocity and gravity
+        ball_velocity[1] += gravity
+        ball.x += int(ball_velocity[0])
+        ball.y += int(ball_velocity[1])
+
+        #boundaries
+        if ball.left <= 0 or ball.right >= WIDTH:
+            ball_velocity[0] = -ball_velocity[0] #inverting horizontal velocity if it hits the boundaries
+        if ball.top <= 0:
+            ball_velocity[1] = -ball_velocity[1] #inverting vertical velocity if it hits the top boundary
+
+        #reseting ball position if it goes off the bottom
+        if ball.y > HEIGHT - 100:
+            ball = pygame.Rect(WIDTH // 2, HEIGHT - 100, 30, 30) #reset ball position
+            ball_velocity = [0, 0]
+
+        #checking for scoring collision with the ring
+        if ball.bottom >= ring.top and ball.bottom <= ring.top + ball_velocity[1] and ball.colliderect(ring):
+            #scoring only if hitting the top edge of the ring
+            score += 1
+            #reseting the ball position and velocity
+            ball = pygame.Rect(WIDTH // 2, HEIGHT, 30, 30)
+            ball_velocity = [0, 0]
+            #randomizing the ring position
+            ring.x = random.randint(100, HEIGHT - 200)
+
+        screen.blit(ring_image, (ring.x - 25, ring.y - 75)) #centering the ring image around the rect
+        screen.blit(ball_image, ball.topleft)
+
+        score_text = font.render(f"Score: {score}", True, BLACK)
+        screen.blit(score_text, (10, 10))
+
     else:
         screen.blit(unpbplay_small, unpbplay_small_rect)
         screen.blit(unpbexit_small, unpbexit_small_rect)
-        screen.blit(unpbinfo_small, unpbinfo_small_rect)   
+        screen.blit(unpbinfo_small, unpbinfo_small_rect)      
 
     pygame.display.flip() 
+  

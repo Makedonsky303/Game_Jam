@@ -172,14 +172,3 @@ knowledge_bar.unit = 0
 sleep_bar = Bar(x_margin_for_bars,65,200,25,100,BLUE)
 satiety_bar = Bar(x_margin_for_bars,100,200,25,100,RED)
 happiness_bar = Bar(x_margin_for_bars,135,200,25,100,YELLOW)
-
-
-#числовые показатели статистики
-knowledge_points = font_small.render(f"{knowledge_bar.unit}", True, (0, 0, 0))
-knowledge_points_rect = knowledge_points.get_rect(center = (120, 40))
-sleep_points = font_small.render(f"{sleep_bar.unit}", True, (0, 0, 0))
-sleep_points_rect = sleep_points.get_rect(center = (120, 75))
-satiety_points = font_small.render(f"{satiety_bar.unit}", True, (0, 0, 0))
-satiety_points_rect = satiety_points.get_rect(center = (120, 110))
-happiness_points = font_small.render(f"{happiness_bar.unit}", True, (0, 0, 0))
-happiness_points_rect = happiness_points.get_rect(center = (120, 145))

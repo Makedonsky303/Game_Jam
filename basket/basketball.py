@@ -1,11 +1,10 @@
 import pygame
 import random
+from settings import *
 
 pygame.init()
 
 #constants
-W = 1500
-H = 700
 ball_radius = 15
 gravity = 0.15
 drag_strength = 0.03
@@ -14,7 +13,7 @@ white = (255,255,255)
 black = (0,0,0)
 
 #game window
-screen = pygame.display.set_mode((W,H))
+screen = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Basketball game")
 bg = pygame.transform.scale(pygame.image.load("bg.png"), (1500, 700))
 
@@ -23,10 +22,10 @@ ball_image = pygame.transform.scale(pygame.image.load("ball_image.png"), (30,30)
 ring_image = pygame.transform.scale(pygame.image.load("ring_image.png"), (150,150))
 
 #ball settings
-ball = pygame.Rect(W // 2, H - 100, 30, 30) #position of the ball
+ball = pygame.Rect(WIDTH // 2, HEIGHT - 100, 30, 30) #position of the ball
 ball_velocity = [0, 0] #initial
 
-ring_x = random.randint(100, H - 200) # initial position (random)
+ring_x = random.randint(100, HEIGHT - 200) # initial position (random)
 ring_y = 150
 ring = pygame.Rect(ring_x, ring_y, 100, 10) # ring in the center with width 100 and height 10
 
@@ -62,14 +61,14 @@ while running:
     ball.y += int(ball_velocity[1])
 
     #boundaries
-    if ball.left <= 0 or ball.right >= W:
+    if ball.left <= 0 or ball.right >= WIDTH:
         ball_velocity[0] = -ball_velocity[0] #inverting horizontal velocity if it hits the boundaries
     if ball.top <= 0:
         ball_velocity[1] = -ball_velocity[1] #inverting vertical velocity if it hits the top boundary
 
     #reseting ball position if it goes off the bottom
-    if ball.y > H - 100:
-        ball = pygame.Rect(W // 2, H - 100, 30, 30) #reset ball position
+    if ball.y > HEIGHT - 100:
+        ball = pygame.Rect(WIDTH // 2, HEIGHT - 100, 30, 30) #reset ball position
         ball_velocity = [0, 0]
 
     #checking for scoring collision with the ring
@@ -77,10 +76,10 @@ while running:
         #scoring only if hitting the top edge of the ring
         score += 1
         #reseting the ball position and velocity
-        ball = pygame.Rect(W // 2, H, 30, 30)
+        ball = pygame.Rect(WIDTH // 2, HEIGHT, 30, 30)
         ball_velocity = [0, 0]
         #randomizing the ring position
-        ring.x = random.randint(100, H - 200)
+        ring.x = random.randint(100, HEIGHT - 200)
 
     screen.blit(ring_image, (ring.x - 25, ring.y - 75)) #centering the ring image around the rect
     screen.blit(ball_image, ball.topleft)
