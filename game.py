@@ -153,6 +153,7 @@ while True:
                     time.sleep(0.3) 
         
     if gaming:
+        
 
         #на память коменты оставил (:
         #после добавки спрайтов зданий эти прямоугольники нужно убрать
@@ -213,14 +214,21 @@ while True:
             auto.move()
             auto.draw(screen)
 
-        if S1.rect.x>= 215 and S1.rect.x <= 355 and S1.rect.y >= 440:
+        if S1.rect.x>= 165 and S1.rect.x <= 355 and S1.rect.y >= 440:
             confirmation_text = font_small.render("Basketball Field", True, (0, 0, 0))
             confirmation_text_rect = confirmation_text.get_rect(center=(WIDTH//2 + 75, HEIGHT//2 - 175))
             ask_confirmation_happ(screen, confirmation_text, confirmation_text_rect, 5)
             if confirmation:
                 gaming = False
                 basketball = True
-                continue    
+                if happiness_bar.unit<95:
+                    happiness_bar.unit += 5
+                else:
+                    happiness_bar.unit = 100
+                continue
+            elif confirmation == False:
+                confirmation = None
+                S1.rect.center = (WIDTH//5+100, HEIGHT//2+150)    
 
         if pygame.sprite.spritecollideany(S1, autos):
             screen.blit(accidentScreen, accidentScreen_rect)
@@ -457,6 +465,14 @@ while True:
         screen.blit(unpbinfo_small, unpbinfo_small_rect)
         pygame.display.update()
     elif basketball:   
+        if score == 5:
+            background = gameScreen
+            background_rect = gameScreen_rect
+            basketball = False
+            gaming = True
+            confirmation = None
+            S1.rect.center = (WIDTH//5+100, HEIGHT//2+150)   
+            continue
         background = bg
         background_rect = bg_rect
         
