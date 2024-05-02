@@ -69,8 +69,6 @@ ball_radius = 15
 gravity = 0.15
 drag_strength = 0.03
 
-
-
 #loading images
 ball_image = pygame.transform.scale(pygame.image.load("basket/ball_image.png"), (30,30))
 ring_image = pygame.transform.scale(pygame.image.load("basket/ring_image.png"), (150,150))
@@ -78,11 +76,12 @@ ring_image = pygame.transform.scale(pygame.image.load("basket/ring_image.png"), 
 ball = pygame.Rect(WIDTH // 2, HEIGHT - 100, 30, 30) #position of the ball
 ball_velocity = [0, 0] #initial
 
-ring_x = random.randint(100, HEIGHT - 200) # initial position (random)
+ring_x = random.randint(150, WIDTH - 150) # initial position (random)
 ring_y = 150
 ring = pygame.Rect(ring_x, ring_y, 100, 10) # ring in the center with width 100 and height 10
 
 #initial states of the game
+ball_rotate = 0
 dragging = False
 drag_start_pos = None
 score = 0

@@ -225,6 +225,10 @@ while True:
                     happiness_bar.unit += 5
                 else:
                     happiness_bar.unit = 100
+
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load("basket/basketball.mp3")
+                pygame.mixer.music.play(-1)    
                 continue
             elif confirmation == False:
                 confirmation = None
@@ -471,8 +475,12 @@ while True:
             basketball = False
             gaming = True
             confirmation = None
-            S1.rect.center = (WIDTH//5+100, HEIGHT//2+150)   
+            S1.rect.center = (WIDTH//5+100, HEIGHT//2+150) 
+            pygame.mixer.music.stop()
+            pygame.mixer.music.load("zvuk/A_Bit_Of_Hope_-_David_Fesliyan.mp3") 
+            pygame.mixer.music.play(-1) 
             continue
+        
         background = bg
         background_rect = bg_rect
         
@@ -480,7 +488,18 @@ while True:
         ball_velocity[1] += gravity
         ball.x += int(ball_velocity[0])
         ball.y += int(ball_velocity[1])
-
+        if (int(ball_velocity[0]) != 0 and int(ball_velocity[1]) != 0) and (ball_rotate >= 0 and ball_rotate <=2):
+            ball_image = pygame.transform.scale(pygame.image.load("basket/ball_image2.png"), (30,30))
+            ball_rotate+=1
+            if ball_rotate>=6:
+                ball_rotate=0
+            
+        elif (int(ball_velocity[0]) != 0 and int(ball_velocity[1]) != 0) and (ball_rotate >= 3 and ball_rotate <=5): 
+            ball_image = pygame.transform.scale(pygame.image.load("basket/ball_image.png"), (30,30))
+            ball_rotate+=1
+            if ball_rotate>=6:
+                ball_rotate=0
+            
         #boundaries
         if ball.left <= 0 or ball.right >= WIDTH:
             ball_velocity[0] = -ball_velocity[0] #inverting horizontal velocity if it hits the boundaries
@@ -500,7 +519,7 @@ while True:
             ball = pygame.Rect(WIDTH // 2, HEIGHT, 30, 30)
             ball_velocity = [0, 0]
             #randomizing the ring position
-            ring.x = random.randint(100, HEIGHT - 200)
+            ring.x = random.randint(150, WIDTH - 150)
 
         screen.blit(ring_image, (ring.x - 25, ring.y - 75)) #centering the ring image around the rect
         screen.blit(ball_image, ball.topleft)
